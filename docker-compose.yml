@@ -6,20 +6,30 @@ version: '3'
 services:
   # Container for the MariaDB database.
   Database:
+    container_name: "useless_data"
     build: ./requirements/mariadb
     networks:
      - WIRED_v7
   # Container which will serve the externally available website.
   Server:
+    container_name: "n-ginks"
     build: ./requirements/nginx
     networks:
       - WIRED_v7
+    ports:
+      - 443:443
   # Accursed software, used only by Boomers and the easily hacked.
   LetterCrunch:
+    container_name: "LetterCrunch"
     build: ./requirements/wordpress
     networks:
       - WIRED_v7
-
+# The Networks span the globe, encompassing all devices in their malevolence.
 networks:
   WIRED_v7:
     driver: bridge
+
+volumes:
+  DB:
+
+  WP:
