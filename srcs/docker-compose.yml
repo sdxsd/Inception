@@ -1,41 +1,60 @@
 version: '3'
-
 # No matter where you go everyone is connected...
 # Protocol 7 developed by Tachibana Laboratories.
+#
+services: # Containers to be started.
 
-services:
   # Container for the MariaDB database.
   Database:
     container_name: "useless_data"
     build: ./requirements/mariadb
+    restart: on-failure
     networks:
      - WIRED_v7
+
   # Container which will serve the externally available website.
   Server:
     container_name: "n-ginks"
-    build: ./requirements/nginx
+    build: ./requirements/nginx # Location of the dockerfile.
+    restart: on-failure # Docker container automaticall restarts on crash.
+    healthcheck: # Checks if the container is running correctly.
+      test: ["CMD", "curl", "-f", "http://localhost:443"]
+      interval: 60s
+      timeout: 4s
+      retries: 2
+    depends_on: # Specifies other containers which this container depends on to run.
+      - LetterCrunch
     networks:
       - WIRED_v7
-    ports:
+    ports: # Binds the container port 443 to the host's 443. Any data sent to the host on 443 will be passed on.
       - 443:443
+    volumes: # Specifies a volume [WP] and where it should be mounted in the containers virtual file system.
+      - WP:/mnt/wordpress
+
   # Accursed software, used only by Boomers and the easily hacked.
   LetterCrunch:
     container_name: "LetterCrunch"
     build: ./requirements/wordpress
+    restart: on-failure
+    depends_on:
+      - Database
     networks:
       - WIRED_v7
+    volumes:
+      - WP:/mnt/wordpress
+
 # The Networks span the globe, encompassing all devices in their malevolence.
-networks:
-  WIRED_v7:
-    driver: bridge
+networks: # Virtual networks to be created.
+  WIRED_v7: # Virtual network named: "WIRED_v7".
+    driver: bridge # Specifies that the network to be created is an isolated network specifically for the communication of its member containers.
 
 volumes:
   DB:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/home/wmaguire/data/mariadb'
+    driver: local # Default driver. Other options could for example be NFS or network file system.
+    driver_opts: # Driver options.
+      type: 'none' # default type.
+      o: 'bind' # Specifies that the volume will be accessible to both the host and the specified containers.
+      device: '/home/wmaguire/data/mariadb' # Directory where the volume will be stored/available.
   WP:
     driver: local
     drive_opts:
