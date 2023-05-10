@@ -1,0 +1,25 @@
+version: '3'
+
+# No matter where you go everyone is connected...
+# Protocol 7 developed by Tachibana Laboratories.
+
+services:
+  # Container for the MariaDB database.
+  Database:
+    build: ./requirements/mariadb
+    networks:
+     - WIRED_v7
+  # Container which will serve the externally available website.
+  Server:
+    build: ./requirements/nginx
+    networks:
+      - WIRED_v7
+  # Accursed software, used only by Boomers and the easily hacked.
+  LetterCrunch:
+    build: ./requirements/wordpress
+    networks:
+      - WIRED_v7
+
+networks:
+  WIRED_v7:
+    driver: bridge
