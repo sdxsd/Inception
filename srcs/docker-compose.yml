@@ -31,5 +31,14 @@ networks:
 
 volumes:
   DB:
-
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/wmaguire/data/mariadb'
   WP:
+    driver: local
+    drive_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/wmaguire/data/wordpress'
