@@ -9,7 +9,14 @@ COPY conf/cert ${WORKDIR}
 RUN	chmod +x mkcert && \
 	./mkcert -install && \
 	./mkcert localhost && \
-	mv *.pem /etc/nginx/ssl/ && \
+	mv *.pem /etc/nginx/ssl/
 
+RUN mkdir /tmp/nginx_conf
+WORKDIR /tmp/nginx_conf
+
+COPY conf/nginx.conf ${WORKDIR}
+RUN rm -rfv /etc/nginx/sites-enabled/* && \
+	mv nginx.conf /etc/nginx/sites-available && \
+	ln -fs /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/
 
 WORKDIR /tmp/
