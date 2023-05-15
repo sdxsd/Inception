@@ -19,4 +19,4 @@ RUN rm -rfv /etc/nginx/sites-enabled/* && \
 	mv nginx.conf /etc/nginx/sites-available && \
 	ln -fs /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/
 
-WORKDIR /tmp/
+CMD ["nginx", "-g" ,"daemon off;"]
