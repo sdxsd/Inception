@@ -1,5 +1,6 @@
 FROM debian:buster
-WORKDIR /mariadb
+RUN MKDIR /tmp/mariadb
+WORKDIR /tmp/mariadb
 COPY . .
-RUN apt update && apt upgrade
-EXPOSE 3000
+RUN apt-get update && apt-get upgrade -y && apt-get install -y mariadb-server
+EXPOSE 3306

@@ -1,8 +1,8 @@
 version: '3'
 # No matter where you go everyone is connected...
 # Protocol 7 developed by Tachibana Laboratories.
-#
-services: # Containers to be started.
+
+services: # Docker containers to be started.
 
   # Container for the MariaDB database.
   Database:
@@ -16,7 +16,7 @@ services: # Containers to be started.
   Server:
     container_name: "n-ginks"
     build: ./requirements/nginx # Location of the dockerfile.
-    restart: on-failure # Docker container automaticall restarts on crash.
+    restart: on-failure # Docker container automatically restarts on crash.
     healthcheck: # Checks if the container is running correctly.
       test: ["CMD", "curl", "-f", "http://localhost:443"]
       interval: 60s
@@ -50,9 +50,9 @@ networks: # Virtual networks to be created.
 
 volumes:
   DB:
-    driver: local # Default driver. Other options could for example be NFS or network file system.
+    driver: local # Default driver. Other options could for example be NFS - Network File System.
     driver_opts: # Driver options.
-      type: 'none' # default type.
+      type: 'none' # Default type.
       o: 'bind' # Specifies that the volume will be accessible to both the host and the specified containers.
       device: '/home/wmaguire/data/mariadb' # Directory where the volume will be stored/available.
   WP:
