@@ -61,7 +61,7 @@ volumes:
       device: '/home/wmaguire/data/mariadb' # Directory where the volume will be stored/available.
   WP:
     driver: local
-    drive_opts:
+    driver_opts:
       type: 'none'
       o: 'bind'
       device: '/home/wmaguire/data/wordpress'
