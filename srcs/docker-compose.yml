@@ -11,6 +11,8 @@ services: # Docker containers to be started.
     restart: on-failure
     networks:
      - WIRED_v7
+    env_file:
+      - .env
 
   # Container which will serve the externally available website.
   Server:
@@ -42,6 +44,8 @@ services: # Docker containers to be started.
       - WIRED_v7
     volumes:
       - WP:/mnt/wordpress
+    env_file:
+      - .env
 
 # The Networks span the globe, encompassing all devices in their malevolence.
 networks: # Virtual networks to be created.
