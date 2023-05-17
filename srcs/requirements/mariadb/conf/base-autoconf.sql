@@ -10,4 +10,7 @@ GRANT ALL PRIVILEGES ON LetterCrunch.* TO 'USRNAME'@'localhost';
 -- Applies the granting of privilege.
 FLUSH PRIVILEGES;
 
+-- Creating the regular user.
 CREATE USER IF NOT EXISTS 'REG_USRNAME'@'localhost' IDENTIFIED BY 'REG_PASSWD';
+GRANT SELECT PRIVILEGES ON LetterCrunch.* to 'REG_USRNAME'@'localhost';
+FLUSH PRIVILEGES;
