@@ -30,7 +30,7 @@ version: '3'
 services: # Docker containers to be started.
 
   # Container for the MariaDB database.
-  Database:
+  database:
     container_name: "useless_data"
     build: ./requirements/mariadb
     restart: on-failure
@@ -40,7 +40,7 @@ services: # Docker containers to be started.
       - .env
 
   # Container which will serve the externally available website.
-  Server:
+  server:
     container_name: "n-ginks"
     build: ./requirements/nginx # Location of the dockerfile.
     restart: on-failure # Docker container automatically restarts on crash.
@@ -50,7 +50,7 @@ services: # Docker containers to be started.
       timeout: 4s
       retries: 2
     depends_on: # Specifies other containers which this container depends on to run.
-      - LetterCrunch
+      - lettercrunch
     networks:
       - WIRED_v7
     ports: # Binds the container port 443 to the host's 443. Any data sent to the host on 443 will be passed on.
@@ -59,12 +59,12 @@ services: # Docker containers to be started.
       - WP:/mnt/wordpress
 
   # Accursed software, used only by Boomers and the easily hacked.
-  LetterCrunch:
-    container_name: "LetterCrunch"
+  lettercrunch:
+    container_name: "lettercrunch"
     build: ./requirements/wordpress
     restart: on-failure
     depends_on:
-      - Database
+      - database
     networks:
       - WIRED_v7
     volumes:

@@ -32,16 +32,19 @@ RUN mkdir /tmp/mariadb
 # Changes the current directory to /tmp/mariadb, the WORKDIR command is equivalent to "cd"
 WORKDIR /tmp/mariadb
 
+# Exposes the default port for mysql as required in the subject.
+EXPOSE 3306
+
 # Copies the sql script from the conf directory on the host system.
-COPY conf/base-autoconf.sql .
+COPY conf/base-autoconf.sql ${WORKDIR}
 # Replaces the placeholder PASSWD and USRNAME with the credentials from the .env file.
-RUN sed "s/PASSWD/\'$PASSWORD\'/g; s/USRNAME/\'$USERNAME\'/g" base-autconf.sql > autoconf.sql
+RUN sed "s/PASSWD/\'${PASSWORD}\'/g; s/USRNAME/\'${USERNAME}\'/g" base-autoconf.sql > autoconf.sql
 # Starts the (mariadbd) mysql daemon and runs the mariadb autoconfiguration script.
-RUN systemctl start mysql && mariadb -u root < /tmp/mariadb/autconf.sql
+RUN service mysql start && mariadb -u root < /tmp/mariadb/autoconf.sql
 # Gets the host address of the private docker network.
-ENV NET_ADDR=$(ip addr show eth0 | grep inet | awk '{print $2}' | awk -F'/' '{print $1}')
 # Configures the mysql (mariadb) server to only accept connections from the private docker network.
-RUN sed -i 's/bind-address\s*=.*/bind-address = $NET_ADDR/' /etc/mysql/mariadb.conf.d/50-server.cnf
+RUN NET_ADDR=$(ip addr show eth0 | grep inet | awk '{print $2}' | awk -F'/' '{print $1}') && \
+	sed -i 's/bind-address\s*=.*/bind-address = $NET_ADDR/' /etc/mysql/mariadb.conf.d/50-server.cnf
 
 #     _.-'''''-._
 #   .'  _     _  '.
@@ -55,5 +58,3 @@ RUN sed -i 's/bind-address\s*=.*/bind-address = $NET_ADDR/' /etc/mysql/mariadb.c
 #                      ON THIS REPO.
 #
 #                      YOU WILL FACE ONLY THE WRATH OF YOUR CONSCIENCE.
-
-EXPOSE 3306 # Exposes the default port for mysql as required in the subject.
