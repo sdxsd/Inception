@@ -70,7 +70,7 @@ RUN wp-cli core install --allow-root \
 					--url="https://localhost/wordpress"
 
 # Creates a new regular user.
-RUN wp-cli user create --allow-root --yes $REG_USRNAME --user_pass="$REG_PASSWD" --path="/var/www/wordpress"
+RUN wp-cli user create --allow-root --yes $REGUSERNAME --user_pass="$REG_PASSWD" --path="/var/www/wordpress"
 
 # Explicitly enables php-fpm
 CMD	["php-fpm7.3", "-F", "-R"]
