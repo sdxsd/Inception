@@ -14,7 +14,7 @@ RUN sed "s/PASSWD/\'$PASSWORD\'/g; s/USRNAME/\'$USERNAME\'/g" base-autconf.sql >
 # Starts the (mariadbd) mysql daemon and runs the mariadb autoconfiguration script.
 RUN systemctl start mysql && mariadb -u root < /tmp/mariadb/autconf.sql
 # Gets the host address of the private docker network.
-RUN export NET_ADDR=$(ip addr show eth0 | grep inet | awk '{print $2}' | awk -F'/' '{print $1}')
+ENV NET_ADDR=$(ip addr show eth0 | grep inet | awk '{print $2}' | awk -F'/' '{print $1}')
 # Configures the mysql (mariadb) server to only accept connections from the private docker network.
 RUN sed -i 's/bind-address\s*=.*/bind-address = $NET_ADDR/' /etc/mysql/mariadb.conf.d/50-server.cnf
 
