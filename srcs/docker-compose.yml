@@ -29,37 +29,6 @@ version: '3'
 
 services: # Docker containers to be started.
 
-  # Container for the MariaDB database.
-  database:
-    container_name: "useless_data"
-    build: ./requirements/mariadb
-    restart: on-failure
-    networks:
-     - WIRED_v7
-    env_file:
-      - .env
-    volumes:
-      - DB:/var/lib/mysql
-
-  # Container which will serve the externally available website.
-  server:
-    container_name: "n-ginks"
-    build: ./requirements/nginx # Location of the dockerfile.
-    restart: on-failure # Docker container automatically restarts on crash.
-    healthcheck: # Checks if the container is running correctly.
-      test: ["CMD", "curl", "-f", "http://localhost:443"]
-      interval: 60s
-      timeout: 4s
-      retries: 2
-    depends_on: # Specifies other containers which this container depends on to run.
-      - lettercrunch
-    networks:
-      - WIRED_v7
-    ports: # Binds the container port 443 to the host's 443. Any data sent to the host on 443 will be passed on.
-      - 443:443
-    volumes: # Specifies a volume [WP] and where it should be mounted in the containers virtual file system.
-      - WP:/mnt/wordpress
-
   # Accursed software, used only by Boomers and the easily hacked.
   lettercrunch:
     container_name: "lettercrunch"
@@ -73,6 +42,32 @@ services: # Docker containers to be started.
       - WP:/mnt/wordpress
     env_file:
       - .env
+
+  # Container which will serve the externally available website.
+  server:
+    container_name: "n-ginks"
+    build: ./requirements/nginx # Location of the dockerfile.
+    restart: on-failure # Docker container automatically restarts on crash.
+    depends_on: # Specifies other containers which this container depends on to run.
+      - lettercrunch
+    networks:
+      - WIRED_v7
+    ports: # Binds the container port 443 to the host's 443. Any data sent to the host on 443 will be passed on.
+      - 443:443
+    volumes: # Specifies a volume [WP] and where it should be mounted in the containers virtual file system.
+      - WP:/mnt/wordpress
+
+  # Container for the MariaDB database.
+  database:
+    container_name: "useless_data"
+    build: ./requirements/mariadb
+    restart: on-failure
+    networks:
+     - WIRED_v7
+    env_file:
+      - .env
+    volumes:
+      - DB:/var/lib/mysql
 
 # The Networks span the globe, encompassing all devices in their malevolence.
 networks: # Virtual networks to be created.
