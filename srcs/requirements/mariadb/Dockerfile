@@ -58,3 +58,5 @@ RUN NET_ADDR=$(ip addr show eth0 | grep inet | awk '{print $2}' | awk -F'/' '{pr
 #                      ON THIS REPO.
 #
 #                      YOU WILL FACE ONLY THE WRATH OF YOUR CONSCIENCE.
+
+CMD mysqld

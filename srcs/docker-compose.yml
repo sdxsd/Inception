@@ -36,13 +36,10 @@ services: # Docker containers to be started.
     restart: on-failure
     networks:
      - WIRED_v7
-    environment:
-      PASSWORD: ${PASSWORD}
-      USERNAME: ${USERNAME}
-      REGPASSWORD: ${REGPASSWORD}
-      REGUSERNAME: ${REGUSERNAME}
-    # env_file:
-    #   - .env
+    env_file:
+      - .env
+    volumes:
+      - DB:/var/lib/mysql
 
   # Container which will serve the externally available website.
   server:
