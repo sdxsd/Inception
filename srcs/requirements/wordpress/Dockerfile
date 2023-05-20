@@ -44,7 +44,7 @@ ARG REGUSERNAME
 #                      YOU WILL FACE ONLY THE WRATH OF YOUR CONSCIENCE.
 
 # Updates container & exposes port 9000 for php-fpm (CGI).
-RUN apt-get update && apt-get upgrade -y && apt-get install -y php-fpm php-mysql
+RUN apt-get update && apt-get upgrade -y && apt-get install -y php7.3-fpm php7.3-mysql
 EXPOSE 9000
 
 # Sets up directories & imports wordpress into the container.
@@ -66,20 +66,19 @@ RUN NET_ADDR=$(ip addr show eth0 | grep inet | awk '{print $2}' | awk -F'/' '{pr
 RUN mv wp-cli.phar /usr/local/bin/wp-cli && \
 	cp -Rav /tmp/wordpress /var/www/
 
+WORKDIR /var/www/wordpress
+
 # Install Wordpress through the Command Line Interface.
 RUN wp-cli core install --yes --allow-root \
 					--title="LetterCrunch" \
-					--admin_name="${USERNAME}" \
+					--admin_name="$USERNAME" \
 					--admin_password="${PASSWORD}" \
 					--admin_email="email@emailservice.org" \
-					--path="/var/www/wordpress" \
 					--url="https://localhost/wordpress"
-
 
 # Creates a new regular user.
 RUN wp-cli user create	--allow-root \
 						${REGUSERNAME} --user_pass="${REGPASSWORD}" \
-						--path="/var/www/wordpress" \
 						--user_email="user@email.org"
 
 # Explicitly enables php-fpm
