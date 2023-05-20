@@ -25,6 +25,12 @@
 
 # Sets the base of the container to Debian.
 FROM debian:buster
+
+ARG PASSWORD
+ARG USERNAME
+ARG REGPASSWORD
+ARG REGUSERNAME
+
 # Updates system and installs MariaDB.
 RUN apt-get update && apt-get upgrade -y && apt-get install -y mariadb-server mariadb-client
 # Creates the working directory.
@@ -39,12 +45,12 @@ EXPOSE 3306
 COPY conf/base-autoconf.sql ${WORKDIR}
 # Replaces the placeholder PASSWD and USRNAME with the credentials from the .env file.
 RUN sed "s/PASSWD/${PASSWORD}/g; s/USRNAME/${USERNAME}/g; s/REGUSRNAME/${REGUSERNAME}/g; s/REGPASSWD/${REGPASSWORD}/g" base-autoconf.sql > autoconf.sql
-# Starts the (mariadbd) mysql daemon and runs the mariadb autoconfiguration script.
-RUN service mysql start && mariadb -u root < /tmp/mariadb/autoconf.sql
 # Gets the host address of the private docker network.
 # Configures the mysql (mariadb) server to only accept connections from the private docker network.
 RUN NET_ADDR=$(ip addr show eth0 | grep inet | awk '{print $2}' | awk -F'/' '{print $1}') && \
 	sed -i 's/bind-address\s*=.*/bind-address = $NET_ADDR/' /etc/mysql/mariadb.conf.d/50-server.cnf
+# Starts the (mariadbd) mysql daemon and runs the mariadb autoconfiguration script.
+CMD service mysql start && mariadb -u root < /tmp/mariadb/autoconf.sql
 
 #     _.-'''''-._
 #   .'  _     _  '.
@@ -58,5 +64,3 @@ RUN NET_ADDR=$(ip addr show eth0 | grep inet | awk '{print $2}' | awk -F'/' '{pr
 #                      ON THIS REPO.
 #
 #                      YOU WILL FACE ONLY THE WRATH OF YOUR CONSCIENCE.
-
-CMD mysqld

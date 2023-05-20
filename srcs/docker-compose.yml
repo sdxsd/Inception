@@ -32,7 +32,13 @@ services: # Docker containers to be started.
   # Accursed software, used only by Boomers and the easily hacked.
   lettercrunch:
     container_name: "lettercrunch"
-    build: ./requirements/wordpress
+    build:
+      context: ./requirements/wordpress
+      args:
+        - PASSWORD=${PASSWORD}
+        - USERNAME=${USERNAME}
+        - REGUSERNAME=${REGUSERNAME}
+        - REGPASSWORD=${REGPASSWORD}
     restart: on-failure
     depends_on:
       - database
@@ -40,8 +46,6 @@ services: # Docker containers to be started.
       - WIRED_v7
     volumes:
       - WP:/mnt/wordpress
-    env_file:
-      - .env
 
   # Container which will serve the externally available website.
   server:
@@ -60,7 +64,13 @@ services: # Docker containers to be started.
   # Container for the MariaDB database.
   database:
     container_name: "useless_data"
-    build: ./requirements/mariadb
+    build:
+      context: ./requirements/mariadb
+      args:
+        - PASSWORD=${PASSWORD}
+        - USERNAME=${USERNAME}
+        - REGUSERNAME=${REGUSERNAME}
+        - REGPASSWORD=${REGPASSWORD}
     restart: on-failure
     networks:
      - WIRED_v7
