@@ -56,7 +56,7 @@ RUN tar -xvf wordpress.tar.xz
 WORKDIR /tmp/wordpress
 
 # Inserts credentials from .env into the wp-config.php file.
-RUN sed -i "s/PASSWD/${PASSWORD}/g; s/USRNAME/${USERNAME}/g;" wp-config.php
+RUN mv ../wp-config.php . && sed -i "s/PASSWD/${PASSWORD}/g; s/USRNAME/${USERNAME}/g;" wp-config.php
 
 # sets which IP addresses php fpm will accept requests from.
 RUN sed "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 0.0.0.0:9000/g" -i /etc/php/7.3/fpm/pool.d/www.conf
