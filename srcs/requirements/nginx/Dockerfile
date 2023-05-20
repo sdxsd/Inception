@@ -43,10 +43,11 @@ EXPOSE 443
 RUN mkdir /tmp/certification_fortification
 WORKDIR /tmp/certification_fortification
 
-COPY conf/cert ${WORKDIR}
+COPY conf/cert/mkcert ${WORKDIR}
 RUN	chmod +x mkcert && \
 	./mkcert -install && \
 	./mkcert localhost && \
+	mkdir -p /etc/nginx/ssl && \
 	mv *.pem /etc/nginx/ssl/
 
 RUN mkdir /tmp/nginx_conf

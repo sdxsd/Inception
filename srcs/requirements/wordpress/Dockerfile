@@ -67,17 +67,15 @@ RUN mv wp-cli.phar /usr/local/bin/wp-cli && \
 WORKDIR /var/www/wordpress
 
 # Install Wordpress through the Command Line Interface.
-RUN wp-cli core install --yes --allow-root \
+# Create new regular user.
+# Start the CGI manager.
+CMD wp-cli core install --yes --allow-root \
 					--title="LetterCrunch" \
 					--admin_name="$USERNAME" \
 					--admin_password="${PASSWORD}" \
 					--admin_email="email@emailservice.org" \
-					--url="https://localhost/wordpress"
-
-# Creates a new regular user.
-RUN wp-cli user create	--allow-root \
+					--url="https://localhost/wordpress" && \
+	wp-cli user create	--allow-root \
 						${REGUSERNAME} --user_pass="${REGPASSWORD}" \
-						--user_email="user@email.org"
-
-# Explicitly enables php-fpm
-CMD	["php-fpm7.3", "-F", "-R"]
+						--user_email="user@email.org" && \
+	php-fpm7.3 -F -R
