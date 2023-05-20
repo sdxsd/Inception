@@ -55,6 +55,9 @@ COPY ./conf/* $WORKDIR
 RUN tar -xvf wordpress.tar.xz
 WORKDIR /tmp/wordpress
 
+# Inserts credentials from .env into the wp-config.php file.
+RUN sed -i "s/PASSWD/${PASSWORD}/g; s/USRNAME/${USERNAME}/g;" wp-config.php
+
 # Ensures that php-fpm only accepts requests from within the private container network. (WIRED_v7).
 RUN NET_ADDR=$(ip addr show eth0 | grep inet | awk '{print $2}' | awk -F'/' '{print $1}') && \
 	sed "s/listen = \/run\/php\/php7.3-fpm.sock/listen = ${NET_ADDR}:9000/g" -i /etc/php/7.3/fpm/pool.d/www.conf
