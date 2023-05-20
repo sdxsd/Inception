@@ -51,10 +51,10 @@ EXPOSE 9000
 WORKDIR /tmp
 ENV WP_DIR=/tmp/lettercrunch
 RUN mkdir $WP_DIR
-COPY ./conf/ .
+COPY ./conf $WP_DIR
 
 # -xf = -x: Extract. | -f: The file to act upon.
-RUN tar -xf $WP_DIR/wordpress.tar.xz --directory $WP_DIR && \
+RUN tar -xvf $WP_DIR/conf/wordpress.tar.xz --directory $WP_DIR && \
 	mv wp-config.php $WP_DIR && mv index.php $WP_DIR
 
 # Ensures that php-fpm only accepts requests from within the private container network. (WIRED_v7).
