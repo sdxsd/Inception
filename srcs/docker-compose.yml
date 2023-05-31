@@ -64,6 +64,7 @@ services: # Docker containers to be started.
   # Container for the MariaDB database.
   database:
     container_name: "useless_data"
+    hostname: database
     build:
       context: ./requirements/mariadb
       args:
