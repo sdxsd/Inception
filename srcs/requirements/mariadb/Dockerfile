@@ -44,10 +44,10 @@ EXPOSE 3306
 # Copies the sql script from the conf directory on the host system.
 COPY conf/base-autoconf.sql ${WORKDIR}
 # Replaces the placeholder PASSWD and USRNAME with the credentials from the .env file.
-RUN sed "s/PASSWD/${PASSWORD}/g; s/USRNAME/${USERNAME}/g; s/REGUSRNAME/${REGUSERNAME}/g; s/REGPASSWD/${REGPASSWORD}/g" base-autoconf.sql > autoconf.sql
+RUN sed -i "s/PASSWD/${PASSWORD}/g; s/USRNAME/${USERNAME}/g; s/REGUSRNAME/${REGUSERNAME}/g; s/REGPASSWD/${REGPASSWORD}/g" base-autoconf.sql
 RUN sed -i 's/bind-address\s*=.*/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
 # Starts the (mariadbd) mysql daemon and runs the mariadb autoconfiguration script.
-RUN service mysql start && mariadb -u root < /tmp/mariadb/autoconf.sql
+RUN service mysql start && mariadb -u root < /tmp/mariadb/base-autoconf.sql
 
 #     _.-'''''-._
 #   .'  _     _  '.

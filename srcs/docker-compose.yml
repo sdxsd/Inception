@@ -59,7 +59,7 @@ services: # Docker containers to be started.
     ports: # Binds the container port 443 to the host's 443. Any data sent to the host on 443 will be passed on.
       - 443:443
     volumes: # Specifies a volume [WP] and where it should be mounted in the containers virtual file system.
-      - WP:/mnt/wordpress
+      - WP:/var/www
 
   # Container for the MariaDB database.
   database:
