@@ -32,6 +32,7 @@ services: # Docker containers to be started.
   # Accursed software, used only by Boomers and the easily hacked.
   lettercrunch:
     container_name: "lettercrunch"
+    hostname: lettercrunch
     build:
       context: ./requirements/wordpress
       args:
@@ -45,7 +46,7 @@ services: # Docker containers to be started.
     networks:
       - WIRED_v7
     volumes:
-      - WP:/mnt/wordpress
+      - WP:/var/www
 
   # Container which will serve the externally available website.
   server:

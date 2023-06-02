@@ -60,9 +60,10 @@ RUN mv ../wp-config.php . && sed -i "s/PASSWD/${PASSWORD}/g; s/USRNAME/${USERNAM
 
 # sets which IP addresses php fpm will accept requests from.
 RUN sed "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 0.0.0.0:9000/g" -i /etc/php/7.3/fpm/pool.d/www.conf
+RUN mkdir -p /var/www/wordpress
 # Moves wp-cli into $PATH & Moves the wordpress files to /var/www/ (The mount point of the docker volume)
 RUN mv wp-cli.phar /usr/local/bin/wp-cli && \
-	cp -Rav /tmp/wordpress /var/www/
+	cp -Rav /tmp/wordpress /var/www/wordpress
 
 WORKDIR /var/www/wordpress
 
