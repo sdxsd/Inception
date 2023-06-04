@@ -64,9 +64,9 @@ RUN mkdir -p /var/www/wordpress
 RUN sed "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 0.0.0.0:9000/g" -i /etc/php/7.3/fpm/pool.d/www.conf
 # Moves wp-cli into $PATH & Moves the wordpress files to /var/www/ (The mount point of the docker volume)
 RUN mv wp-cli.phar /usr/local/bin/wp-cli && \
-	cp -Rav /tmp/wordpress/* /var/www/wordpress
+	cp -av /tmp/wordpress/. /var/www
 
-WORKDIR /var/www/wordpress
+WORKDIR /var/www
 
 RUN mkdir /run/php && chmod 777 /run/php
 
@@ -78,6 +78,6 @@ CMD wp-cli core install --allow-root \
 					--admin_name="$USERNAME" \
 					--admin_password="${PASSWORD}" \
 					--admin_email="email@emailservice.org" \
-					--url="https://localhost/wordpress" \
-					--path="/var/www/wordpress"	&& \
+					--url="https://localhost/" \
+					--path="/var/www"	&& \
 	php-fpm7.3 -F -R

@@ -55,7 +55,7 @@ WORKDIR /tmp/nginx_conf
 
 COPY conf/nginx.conf ${WORKDIR}
 RUN rm -rfv /etc/nginx/sites-enabled/* && \
-	mv nginx.conf /etc/nginx/sites-available && \
+	mv nginx.conf /etc/nginx/sites-available/ && \
 	ln -fs /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/
 
 CMD ["nginx", "-g" ,"daemon off;"]
