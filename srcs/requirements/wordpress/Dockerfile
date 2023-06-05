@@ -66,12 +66,13 @@ RUN sed "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 0.0.0.0:9000/g" -i /etc
 RUN mv wp-cli.phar /usr/local/bin/wp-cli && \
 	cp -av /tmp/wordpress/. /var/www
 
+# Revises the workdir
 WORKDIR /var/www
 
+# Creates a php directory which for some reason isn't automatically created on install.
 RUN mkdir /run/php && chmod 777 /run/php
 
 # Install Wordpress through the Command Line Interface.
-# Create new regular user.
 # Start the CGI manager.
 CMD wp-cli core install --allow-root \
 					--title="LetterCrunch" \

@@ -23,8 +23,11 @@
 
 # A program is free software if users have all of these freedoms.
 
+# Specifies that the current container is to be based off Debian buster.
 FROM debian:buster
+# Updates the container with the latest bloatware.
 RUN apt-get update && apt-get upgrade -y && apt-get install -y nginx
+# Exposes port 443, which is mapped to port 443 on the host machine.
 EXPOSE 443
 
 #     _.-'''''-._
@@ -40,9 +43,11 @@ EXPOSE 443
 #
 #                      YOU WILL FACE ONLY THE WRATH OF YOUR CONSCIENCE.
 
+# Creates temporary directory.
 RUN mkdir /tmp/certification_fortification
 WORKDIR /tmp/certification_fortification
 
+# Creates and installs SSL certificate.
 COPY conf/cert/mkcert ${WORKDIR}
 RUN	chmod +x mkcert && \
 	./mkcert -install && \
@@ -50,12 +55,17 @@ RUN	chmod +x mkcert && \
 	mkdir -p /etc/nginx/ssl && \
 	mv *.pem /etc/nginx/ssl/
 
+# Creates temp nginx conf directory.
 RUN mkdir /tmp/nginx_conf
 WORKDIR /tmp/nginx_conf
 
+# Clears default configs and install the nginx conf into the "sites-available directory".
+# Links the nginx.conf to the sites enabled directory, thus telling nginx that it is a site
+# which it should be serving.
 COPY conf/nginx.conf ${WORKDIR}
 RUN rm -rfv /etc/nginx/sites-enabled/* && \
 	mv nginx.conf /etc/nginx/sites-available/ && \
 	ln -fs /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/
 
+# Runs nginx in the foreground.
 CMD ["nginx", "-g" ,"daemon off;"]

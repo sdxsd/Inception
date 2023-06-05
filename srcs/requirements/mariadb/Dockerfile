@@ -26,6 +26,7 @@
 # Sets the base of the container to Debian.
 FROM debian:buster
 
+# Password/Username arguments. Ask me about .env
 ARG PASSWORD
 ARG USERNAME
 ARG REGPASSWORD
@@ -62,4 +63,5 @@ RUN service mysql start && mariadb -u root < /tmp/mariadb/base-autoconf.sql
 #
 #                      YOU WILL FACE ONLY THE WRATH OF YOUR CONSCIENCE.
 
+# Begins listening for database requests in the foreground.
 CMD mysqld
