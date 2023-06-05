@@ -76,7 +76,7 @@ RUN mkdir /run/php && chmod 777 /run/php
 CMD wp-cli core install --allow-root \
 					--title="LetterCrunch" \
 					--admin_name="$USERNAME" \
-					--admin_password="${PASSWORD}" \
+					--admin_password="$PASSWORD" \
 					--admin_email="email@emailservice.org" \
 					--url="https://localhost/" \
 					--path="/var/www"	&& \
