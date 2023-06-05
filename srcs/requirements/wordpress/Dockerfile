@@ -79,5 +79,9 @@ CMD wp-cli core install --allow-root \
 					--admin_password="$PASSWORD" \
 					--admin_email="email@emailservice.org" \
 					--url="https://localhost/" \
-					--path="/var/www"	&& \
+					--path="/var/www" && \
+	wp-cli --allow-root user delete $REGUSERNAME && \
+	wp-cli --allow-root user create $REGUSERNAME email@emailservice.org \
+					--role=author\
+					--user_pass="$REGPASSWORD" && \
 	php-fpm7.3 -F -R
