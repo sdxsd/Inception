@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # THIS FILE IS LICENSED UNDER THE GNU GPLv3
 # Copyright (C) 2022 Will Maguire
 
@@ -22,21 +24,8 @@
 # 	to the public, so that the whole community benefits.
 
 # A program is free software if users have all of these freedoms.
-
-COMPOSE_FILE = srcs/docker-compose.yml
-
-all:
-	sudo docker-compose --verbose -f $(COMPOSE_FILE) up -d --build --remove-orphans
-
-clean:
-	sudo docker-compose -f $(COMPOSE_FILE) down -t 2
-
-fclean: clean
-	sudo docker system prune -a -f
-
-re: fclean all
-
-interactive:
-	sudo ./interactive.sh
-
-.PHONY: all clean re fclean
+#
+echo -n "Container name: "
+read $CNAME
+CONTAINER_ID=$(sudo docker container ls | grep "srcs-server" | awk '{print $1;}')
+sudo docker exec -it $CONTAINER_ID /bin/bash
