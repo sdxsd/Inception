@@ -49,7 +49,7 @@ EXPOSE 9000
 
 # Sets up directories & imports wordpress into the container.
 WORKDIR /tmp
-COPY ./conf/* $WORKDIR
+COPY ./conf/* $WORKDIR/
 
 # -xvf = (-x: Extract. | -v: verbose | -f: The file to act upon.)
 RUN tar -xvf wordpress.tar.xz
