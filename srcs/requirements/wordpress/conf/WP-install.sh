@@ -7,3 +7,5 @@ wp-cli core install --allow-root \
 --admin_email=email@emailservice.org \
 --url="https://localhost/" \
 --path="/var/www"
+
+wp-cli user create REGUSERNAME email@emailservice.com --user_pass=REGPASSWORD --role=subscriber

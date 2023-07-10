@@ -55,6 +55,7 @@ COPY ./conf/WP-install.sh $WORKDIR
 
 # Makes sure that the wordpress install script uses the correct details.
 RUN sed -i "s/PLACEHOLDER_PASS/${PASSWORD}/g; s/PLACEHOLDER_USERNAME/${USERNAME}/g;" WP-install.sh && chmod +x WP-install.sh
+RUN sed -i "s/REGPASSWORD/${REGPASSWORD}/g; s/REGUSERNAME/${REGUSERNAME}/g;" WP-install.sh && chmod +x WP-install.sh
 
 # -xvf = (-x: Extract. | -v: verbose | -f: The file to act upon.)
 RUN tar -xvf wordpress.tar.xz
