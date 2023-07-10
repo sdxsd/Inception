@@ -49,7 +49,9 @@ EXPOSE 9000
 
 # Sets up directories & imports wordpress into the container.
 WORKDIR /tmp
-COPY ./conf/* $WORKDIR/
+COPY ./conf/wordpress.tar.xz $WORKDIR
+COPY ./conf/wp-config.php $WORKDIR
+COPY ./WP-install.sh $WORKDIR
 
 # -xvf = (-x: Extract. | -v: verbose | -f: The file to act upon.)
 RUN tar -xvf wordpress.tar.xz
@@ -60,13 +62,16 @@ RUN mv ../wp-config.php . && sed -i "s/PASSWD/${PASSWORD}/g; s/USRNAME/${USERNAM
 
 RUN mkdir -p /var/www/wordpress
 
+# Makes sure that the wordpress install script uses the correct details.
+RUN sed -i "s/PLACEHOLDER_PASS/${PASSWORD}/g; s/PLACEHOLDER_USERNAME/${USERNAME}/g;" WP-install.sh
+
 # sets which IP addresses php fpm will accept requests from.
 RUN sed "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 0.0.0.0:9000/g" -i /etc/php/7.3/fpm/pool.d/www.conf
 # Moves wp-cli into $PATH & Moves the wordpress files to /var/www/ (The mount point of the docker volume)
 RUN mv wp-cli.phar /usr/local/bin/wp-cli && \
 	cp -av /tmp/wordpress/. /var/www
 
-# Revises the workdir
+# Change workdir
 WORKDIR /var/www
 
 # Creates a php directory which for some reason isn't automatically created on install.
