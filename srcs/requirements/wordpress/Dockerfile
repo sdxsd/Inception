@@ -51,7 +51,7 @@ EXPOSE 9000
 WORKDIR /tmp
 COPY ./conf/wordpress.tar.xz $WORKDIR
 COPY ./conf/wp-config.php $WORKDIR
-COPY ./WP-install.sh $WORKDIR
+COPY ./conf/WP-install.sh $WORKDIR
 
 # -xvf = (-x: Extract. | -v: verbose | -f: The file to act upon.)
 RUN tar -xvf wordpress.tar.xz
