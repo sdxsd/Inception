@@ -26,6 +26,7 @@
 # A program is free software if users have all of these freedoms.
 #
 echo -n "Container name: "
-read $CNAME
+read CNAME
+echo $CNAME
 CONTAINER_ID=$(sudo docker container ls | grep "srcs-server" | awk '{print $1;}')
 sudo docker exec -it $CONTAINER_ID /bin/bash
