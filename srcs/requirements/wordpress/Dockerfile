@@ -53,6 +53,9 @@ COPY ./conf/wordpress.tar.xz $WORKDIR
 COPY ./conf/wp-config.php $WORKDIR
 COPY ./conf/WP-install.sh $WORKDIR
 
+# Makes sure that the wordpress install script uses the correct details.
+RUN sed -i "s/PLACEHOLDER_PASS/${PASSWORD}/g; s/PLACEHOLDER_USERNAME/${USERNAME}/g;" WP-install.sh && chmod +x WP-install.sh
+
 # -xvf = (-x: Extract. | -v: verbose | -f: The file to act upon.)
 RUN tar -xvf wordpress.tar.xz
 WORKDIR /tmp/wordpress
@@ -62,8 +65,6 @@ RUN mv ../wp-config.php . && sed -i "s/PASSWD/${PASSWORD}/g; s/USRNAME/${USERNAM
 
 RUN mkdir -p /var/www/wordpress
 
-# Makes sure that the wordpress install script uses the correct details.
-RUN sed -i "s/PLACEHOLDER_PASS/${PASSWORD}/g; s/PLACEHOLDER_USERNAME/${USERNAME}/g;" WP-install.sh
 
 # sets which IP addresses php fpm will accept requests from.
 RUN sed "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 0.0.0.0:9000/g" -i /etc/php/7.3/fpm/pool.d/www.conf
@@ -79,11 +80,5 @@ RUN mkdir /run/php && chmod 777 /run/php
 
 # Install Wordpress through the Command Line Interface.
 # Start the CGI manager.
-CMD wp-cli core install --allow-root \
-					--title="LetterCrunch" \
-					--admin_name="$USERNAME" \
-					--admin_password="$PASSWORD" \
-					--admin_email="email@emailservice.org" \
-					--url="https://localhost/" \
-					--path="/var/www" && \
+CMD ./tmp/WP-install.sh && \
 	php-fpm7.3 -F -R
