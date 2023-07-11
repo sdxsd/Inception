@@ -55,7 +55,7 @@ COPY ./conf/WP-install.sh $WORKDIR
 
 # Makes sure that the wordpress install script uses the correct details.
 RUN sed -i "s/PLACEHOLDER_PASS/${PASSWORD}/g; s/PLACEHOLDER_USERNAME/${USERNAME}/g;" WP-install.sh
-RUN sed -i "s/REGPASSWORD/${REGPASSWORD}/g; s/REGUSERNAME/${REGUSERNAME}/g;" WP-install.sh && chmod +x WP-install.sh
+RUN sed -i "s/REGPASSWORD/${REGPASSWORD}/g; s/REGUSERNAME/${REGUSERNAME}/g;" WP-install.sh && chmod +x WP-install.sh && cp WP-install.sh /usr/bin/
 
 # -xvf = (-x: Extract. | -v: verbose | -f: The file to act upon.)
 RUN tar -xvf wordpress.tar.xz
@@ -81,5 +81,5 @@ RUN mkdir /run/php && chmod 777 /run/php
 
 # Install Wordpress through the Command Line Interface.
 # Start the CGI manager.
-CMD ./tmp/WP-install.sh && \
+CMD WP-install.sh && \
 	php-fpm7.3 -F -R
