@@ -9,3 +9,4 @@ wp-cli core install --allow-root \
 --path="/var/www"
 
 wp-cli user create REGUSERNAME email@emailservice.com --user_pass=REGPASSWORD --role=subscriber --allow-root
+true
